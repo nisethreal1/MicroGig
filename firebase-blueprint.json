@@ -1,0 +1,94 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Unique identifier for the user" },
+        "displayName": { "type": "string", "description": "User's display name" },
+        "email": { "type": "string", "format": "email", "description": "User's email address" },
+        "photoURL": { "type": "string", "description": "URL to user's profile photo" },
+        "bio": { "type": "string", "description": "User's biography" },
+        "skills": { "type": "array", "items": { "type": "string" }, "description": "List of user's skills" },
+        "role": { "type": "string", "enum": ["buyer", "seller", "both"], "description": "User's role on the platform" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "When the user profile was created" }
+      },
+      "required": ["uid", "displayName", "email", "role", "createdAt"]
+    },
+    "Service": {
+      "title": "Service",
+      "description": "A service listing (gig) offered by a seller",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "sellerName": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": "number" },
+        "deliveryTime": { "type": "string" },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "rating": { "type": "number" },
+        "reviewCount": { "type": "number" }
+      },
+      "required": ["sellerId", "title", "description", "price", "category", "createdAt"]
+    },
+    "Order": {
+      "title": "Order",
+      "description": "An order placed by a buyer for a service",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "serviceId": { "type": "string" },
+        "serviceTitle": { "type": "string" },
+        "status": { "type": "string", "enum": ["pending", "in-progress", "completed", "cancelled"] },
+        "price": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["khqr", "visa", "balance"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["buyerId", "sellerId", "serviceId", "status", "price", "createdAt"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "A message sent between users",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "senderId": { "type": "string" },
+        "receiverId": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "orderId": { "type": "string" }
+      },
+      "required": ["senderId", "receiverId", "content", "createdAt"]
+    },
+    "Review": {
+      "title": "Review",
+      "description": "A review left by a buyer after an order is completed",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "orderId": { "type": "string" },
+        "serviceId": { "type": "string" },
+        "buyerId": { "type": "string" },
+        "sellerId": { "type": "string" },
+        "rating": { "type": "number" },
+        "feedback": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["orderId", "serviceId", "buyerId", "rating", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": { "schema": "User", "description": "User profiles" },
+    "/services/{serviceId}": { "schema": "Service", "description": "Service listings" },
+    "/orders/{orderId}": { "schema": "Order", "description": "Orders" },
+    "/messages/{messageId}": { "schema": "Message", "description": "Messages" },
+    "/reviews/{reviewId}": { "schema": "Review", "description": "Reviews" }
+  }
+}
